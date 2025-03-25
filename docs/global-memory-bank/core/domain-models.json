@@ -1,0 +1,51 @@
+{
+  "schema": "memory_document_v2",
+  "metadata": {
+    "id": "mcp-server-go-domain-models",
+    "title": "Go製 MCPサーバー ドメインモデル",
+    "documentType": "core",
+    "path": "core/mcp-server-go-domain-models.json",
+    "tags": [
+      "domain",
+      "models",
+      "golang",
+      "mcp",
+      "core"
+    ],
+    "lastModified": "2025-03-25T00:56:17.087530Z",
+    "createdAt": "2025-03-21T08:40:50.132Z",
+    "version": 2
+  },
+  "content": {
+    "sections": [
+      {
+        "title": "概要",
+        "content": "このドキュメントは、Goで実装されたMCPサーバー（SSHトンネル経由RDS READ対応）の主要なドメインモデルを定義します。"
+      },
+      {
+        "title": "コアモデル",
+        "content": "### MCPRequest\n```go\ntype MCPRequest struct {\n  Type   string          `json:\"type\"`\n  Params json.RawMessage `json:\"params\"`\n}\n```\n\n### CallToolParams\n```go\ntype CallToolParams struct {\n  Name      string                 `json:\"name\"`\n  Arguments map[string]interface{} `json:\"arguments\"`\n}\n```\n\n### SQLResult\n```go\ntype SQLResult struct {\n  Rows []map[string]interface{} `json:\"rows\"`\n}\n```\n\n### TableResource\n```go\ntype TableResource struct {\n  URI      string `json:\"uri\"`\n  MimeType string `json:\"mimeType\"`\n  Name     string `json:\"name\"`\n}\n```\n\n### ColumnDefinition\n```go\ntype ColumnDefinition struct {\n  ColumnName string `json:\"column_name\"`\n  DataType   string `json:\"data_type\"`\n}\n```"
+      },
+      {
+        "title": "関連性とルール",
+        "content": "1. **MCPRequest と CallToolParams**:\n   - MCPRequestによりプロトコル種別（type）が決定される\n   - CallToolParamsはSQL実行用のツールパラメータを内包します\n\n2. **SQLResultと構造化結果**:\n   - SQLResultはPostgreSQLクエリ結果を抽象化して返却します\n   - 各行はmap構造を持つジェネリック表現（型安全性は別途保証）\n\n3. **テーブル構造のスキーマ提供**:\n   - TableResource は `ListResources` の返却対象として使用されます\n   - ColumnDefinition は `ReadResource` によって返されるテーブル定義です"
+      },
+      {
+        "title": "コアドキュメントタイプ",
+        "content": "- **mcp_request**: MCPからのクエリや要求情報を含む外部入力\n- **sql_result**: クエリ実行後の出力構造（ユニバーサル形式）\n- **table_schema**: RDSから取得した構造化テーブル定義\n- **tool_definition**: 利用可能なMCPツール定義（例: query）"
+      },
+      {
+        "title": "ドメインルール",
+        "content": "1. **typeの値の厳密な識別**: `type` は `call_tool`, `list_resources` などMCP準拠\n2. **SQLはREAD ONLYに限定**: セキュリティのため、必ずトランザクション内で読み取りのみ\n3. **URIは一意であること**: リソースの識別はテーブル名＋スキーマをベースとする\n4. **ジェネリック構造の使用**: DBのスキーマ変化に強くするため、柔軟な構造を採用"
+      },
+      {
+        "title": "モデル進化",
+        "content": "このドメインモデルは以下の進化を計画しています：\n\n1. **v1（初期）**: `interface{}`ベースの動的構造\n2. **v2（現行）**: 構造体による厳密な型とジェネリックな結果定義\n3. **将来**:\n   - schema.org に基づくスキーマ表現\n   - JSON Schema対応\n   - 型安全なORMマッピング"
+      },
+      {
+        "title": "関連ドキュメント",
+        "content": "- [MCPプロトコル仕様](../03-implementation/mcp-protocol.json)\n- [PostgreSQLスキーマ構造](../07-infrastructure/postgresql-schema.json)\n- [ツール定義一覧](../03-implementation/tool-definitions.json)"
+      }
+    ]
+  }
+}

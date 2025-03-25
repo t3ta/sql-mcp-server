@@ -1,0 +1,26 @@
+# Binaries
+sql-mcp-server
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go
+/vendor/
+*.log
+
+# Environment
+.env
+
+# Editor
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+
+# Dependency files (optional)
+go.sum

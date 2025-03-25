@@ -1,0 +1,51 @@
+{
+  "schema": "memory_document_v2",
+  "metadata": {
+    "id": "mcp-server-go-user-guide",
+    "title": "Go製 MCPサーバー ユーザーガイド",
+    "documentType": "core",
+    "path": "core/mcp-server-go-user-guide.json",
+    "tags": [
+      "guide",
+      "golang",
+      "mcp",
+      "user",
+      "core"
+    ],
+    "lastModified": "2025-03-25T01:01:49.300176Z",
+    "createdAt": "2025-03-21T08:40:50.132Z",
+    "version": 2
+  },
+  "content": {
+    "sections": [
+      {
+        "title": "概要",
+        "content": "このガイドでは、Goで実装されたMCPサーバー（RDS + SSHトンネル対応）を使用するための手順を示します。CLIベースの運用を前提にしています。"
+      },
+      {
+        "title": "前提条件",
+        "content": "- Go 1.22以降がインストールされていること\n- PostgreSQL接続情報（ホスト・ユーザー・パスワード等）\n- （必要に応じて）SSH鍵と踏み台サーバー情報\n- 環境変数または `.env` による設定"
+      },
+      {
+        "title": "インストール方法",
+        "content": "1. リポジトリをクローン:\n```bash\ngit clone https://github.com/your-org/mcp-server-go.git\ncd mcp-server-go\n```\n\n2. ビルド:\n```bash\ngo build -o mcp-server\n```\n\n3. （任意）`.env` を作成:\n```env\nDB_USER=postgres\nDB_PASS=yourpass\nDB_HOST=localhost\nDB_PORT=5432\nDB_NAME=mydb\nUSE_SSH_TUNNEL=true\nSSH_BASTION_HOST=bastion.example.com\nSSH_BASTION_USER=ec2-user\nSSH_PRIVATE_KEY_PATH=~/.ssh/key.pem\n```"
+      },
+      {
+        "title": "起動方法",
+        "content": "SSHトンネルあり:\n```bash\n./mcp-server\n```\n\nSSHトンネルなし（直接接続）:\n```bash\nDB_HOST=rds-host.amazonaws.com DB_PORT=5432 ./mcp-server\n```"
+      },
+      {
+        "title": "使用例",
+        "content": "標準入力に以下のようなJSONを送信:\n```json\n{\n  \"type\": \"call_tool\",\n  \"params\": {\n    \"name\": \"query\",\n    \"arguments\": {\n      \"sql\": \"SELECT * FROM users LIMIT 10\"\n    }\n  }\n}\n```\n\n標準出力例:\n```json\n{\n  \"content\": [\n    {\n      \"type\": \"text\",\n      \"text\": \"[{\\\"id\\\":1,\\\"name\\\":\\\"Alice\\\"}]\"\n    }\n  ],\n  \"isError\": false\n}\n```"
+      },
+      {
+        "title": "トラブルシューティング",
+        "content": "- **接続できない場合**: SSH接続やDBホスト名、ポートを確認してください\n- **空のレスポンス**: SQLクエリが正しいか、対象テーブルにデータがあるか確認してください\n- **MCPエラー**: type や params 構造が正しいか見直してください"
+      },
+      {
+        "title": "関連ドキュメント",
+        "content": "- [MCPプロトコル仕様](../03-implementation/mcp-protocol.json)\n- [SSH構成](../07-infrastructure/ssh-tunneling.json)\n- [PostgreSQL接続設定](../07-infrastructure/db-config.json)"
+      }
+    ]
+  }
+}

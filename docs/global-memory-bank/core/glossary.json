@@ -1,0 +1,47 @@
+{
+  "schema": "memory_document_v2",
+  "metadata": {
+    "id": "mcp-server-go-glossary",
+    "title": "Go製 MCPサーバー 用語集",
+    "documentType": "core",
+    "path": "core/mcp-server-go-glossary.json",
+    "tags": [
+      "glossary",
+      "golang",
+      "mcp",
+      "terminology",
+      "core"
+    ],
+    "lastModified": "2025-03-25T00:57:48.325958Z",
+    "createdAt": "2025-03-21T08:40:50.132Z",
+    "version": 2
+  },
+  "content": {
+    "sections": [
+      {
+        "title": "概要",
+        "content": "このドキュメントでは、Goで実装されたMCPサーバー（SSHトンネル経由RDS READ対応）に関連する主要な用語と略語を定義します。"
+      },
+      {
+        "title": "主要用語",
+        "content": "### MCP (Model Context Protocol)\n大規模言語モデルが外部ツールやリソースと標準的に通信するためのプロトコル。Stdin/Stdoutを通じたJSONメッセージベースの通信が基本。\n\n### Bastion Server (踏み台サーバー)\nプライベートネットワーク内のリソース（RDS等）にアクセスするための中継用サーバー。\n\n### SSHトンネル\n安全なリモートアクセスを提供する仕組みで、MCPサーバーからRDSに踏み台経由でアクセスするために使用される。\n\n### MCPツール (MCP Tool)\nMCPサーバーが提供する「拡張操作」のこと。例として SQLクエリを実行する `query` ツールがある。\n\n### MCPリソース (MCP Resource)\nデータ構造や外部情報ソース（例: データベースのテーブル）を表す抽象オブジェクト。MCPクライアントが参照可能。\n\n### Stdioサーバー\n標準入力/出力を通じてMCP通信を処理する軽量サーバー実装。Goの `os.Stdin`, `os.Stdout` を通じて動作する。\n"
+      },
+      {
+        "title": "略語・頭字語",
+        "content": "- **MCP**: Model Context Protocol\n- **DB**: Database（データベース）\n- **RDS**: Relational Database Service（AWSのマネージドDB）\n- **SSH**: Secure Shell\n- **CLI**: Command Line Interface\n- **STDIO**: Standard Input / Output\n- **SQL**: Structured Query Language"
+      },
+      {
+        "title": "技術用語",
+        "content": "- **pgx**: GoでPostgreSQLを扱うための高速・柔軟なドライバライブラリ\n- **json.RawMessage**: JSONの柔軟な受け渡しに使うGoの型\n- **map[string]interface{}**: 任意の構造を受け取れるGoの汎用マップ型\n- **goroutine**: Goにおける軽量スレッド\n- **defer**: 関数終了時に自動実行される処理（リソース解放など）\n- **interface**: 実装に依存しない抽象化のためのGo構文"
+      },
+      {
+        "title": "プロジェクト固有の用語",
+        "content": "- **mcp/handler.go**: MCPプロトコルのハンドラをまとめたレイヤー\n- **db/ssh_tunnel.go**: SSHトンネルを管理し、踏み台経由でRDSへ接続する処理\n- **transport/stdio.go**: Stdio経由の通信を担当するトランスポート層\n- **types/models.go**: 共通データ構造を定義するファイル\n- **MCPユースケース**: `ListResources`, `ReadResource`, `CallTool`, `ListTools` の各プロトコル対応処理"
+      },
+      {
+        "title": "関連ドキュメント",
+        "content": "- [MCPプロトコル仕様](../03-implementation/mcp-protocol.json)\n- [Stdioサーバー実装](../03-implementation/stdio-server.json)\n- [SSHトンネル管理構成](../07-infrastructure/ssh-tunneling.json)"
+      }
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "memory_document_v2",
+  "metadata": {
+    "id": "mcp-server-go-architecture",
+    "title": "Go製 MCPサーバー（RDS+Bastion対応）アーキテクチャ",
+    "documentType": "core",
+    "path": "core/mcp-server-go-architecture.json",
+    "tags": [
+      "architecture",
+      "system-design",
+      "core",
+      "go"
+    ],
+    "lastModified": "2025-03-25T00:52:54.814499Z",
+    "createdAt": "2025-03-21T08:40:50.132Z",
+    "version": 2
+  },
+  "content": {
+    "sections": [
+      {
+        "title": "概要",
+        "content": "このドキュメントでは、Go言語で実装されたMemory Bank対応MCPサーバー（SSH踏み台サーバー経由でRDSにREADアクセス）におけるシステムアーキテクチャの基本的な構造を示します。"
+      },
+      {
+        "title": "アーキテクチャの原則",
+        "content": "- **関心の分離**: MCP通信処理、DBアクセス、SSHトンネル処理をモジュール分離\n- **依存関係のルール**: MCPプロトコル層がDB層やSSH層に依存（逆はなし）\n- **テスト可能性**: MCPハンドラやDB層はインターフェースで抽象化され、ユニットテスト可能\n- **セキュア設計**: SSHトンネルは明示的に管理、設定ファイルで制御"
+      },
+      {
+        "title": "レイヤー構造",
+        "content": "本システムは以下の4層に分かれています：\n\n1. **エンティティ層（Entities）**: SQL結果やテーブル構造を表すドメインモデル\n2. **ユースケース層（Use Cases）**: MCPプロトコルに準拠した各種ハンドラ（ListResources, CallToolなど）\n3. **インターフェースアダプター層（Interface Adapters）**: Stdioトランスポート、入力/出力の変換層\n4. **フレームワーク・ドライバー層（Frameworks & Drivers）**: Go言語、pgx、SSHクライアント、CLI起動環境"
+      },
+      {
+        "title": "コアコンポーネント",
+        "content": "- **MCPサーバー**: `main.go` にて初期化、標準入力からJSONを受け付けるサーバー\n- **Stdioトランスポート**: `transport/stdio.go` にて実装され、LLM等との連携を可能に\n- **SSHトンネル管理**: `db/ssh_tunnel.go` にて構成され、必要に応じてbastionサーバーを経由\n- **DB接続モジュール**: `db/connection.go` にてpgx経由のRDSアクセスをラップ\n- **MCPハンドラ**: `mcp/handler.go` にて、プロトコル定義に従った各種処理を提供"
+      },
+      {
+        "title": "重要な設計決定",
+        "content": "1. **標準入出力ベース通信**: LLM等との統合性とCLI実行性を両立するためにstdioを使用\n2. **SSHトンネル対応**: セキュリティとネットワーク制限下での柔軟なDBアクセス\n3. **構成ファイルによる制御**: `.env`や設定ファイルにより起動時挙動を変更可能\n4. **最小限の外部依存**: Go組込みまたは標準ライブラリで完結する構成を優先"
+      },
+      {
+        "title": "関連ドキュメント",
+        "content": "- [ドメインモデル定義](../01-project/domain-models.json)\n- [MCPプロトコル仕様](../03-implementation/mcp-protocol.json)\n- [SSHトンネル管理](../07-infrastructure/ssh-tunneling.json)\n- [PostgreSQL接続設定](../07-infrastructure/db-config.json)"
+      }
+    ]
+  }
+}

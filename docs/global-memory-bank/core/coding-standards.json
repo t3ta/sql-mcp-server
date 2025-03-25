@@ -1,0 +1,59 @@
+{
+  "schema": "memory_document_v2",
+  "metadata": {
+    "id": "mcp-server-go-coding-standards",
+    "title": "Go製 MCPサーバー コーディング規約",
+    "documentType": "core",
+    "path": "core/mcp-server-go-coding-standards.json",
+    "tags": [
+      "standards",
+      "best-practices",
+      "golang",
+      "clean-code",
+      "core"
+    ],
+    "lastModified": "2025-03-25T00:54:59.523661Z",
+    "createdAt": "2025-03-21T08:40:50.132Z",
+    "version": 2
+  },
+  "content": {
+    "sections": [
+      {
+        "title": "概要",
+        "content": "このドキュメントでは、Go言語で実装されたMCPサーバー（Bastion経由RDS対応）における基本的なコーディング規約を定義します。"
+      },
+      {
+        "title": "基本原則",
+        "content": "1. **可読性の重視**: 意図が明確に読み取れるコードを優先\n2. **DRY原則**: 同じ処理は関数化・共通化\n3. **KISS原則**: シンプルで明快なロジックを徹底\n4. **単一責任原則**: 各関数・構造体は1つの目的に特化\n5. **テストファースト**: テスト可能性を意識した設計"
+      },
+      {
+        "title": "命名規則",
+        "content": "- **構造体名**: PascalCase（例: `SSHConfig`, `DBClient`）\n- **変数名/関数名**: camelCase（例: `dbPool`, `handleCallTool`）\n- **定数名**: UPPER_SNAKE_CASE（例: `DEFAULT_PORT`）\n- **ファイル名**: スネークケース（例: `ssh_tunnel.go`）\n- **インターフェース名**: `xxxer` 形式（例: `Querier`, `Handler`）"
+      },
+      {
+        "title": "Go特有の規約",
+        "content": "- **エクスポート命名**: 外部公開関数は意図を明確に（例: `StartServer()`）\n- **エラーハンドリング**: `if err != nil` の明示的なハンドリング\n- **deferの活用**: リソース開放を適切な場所で行う\n- **ゼロ値活用**: 初期化時のゼロ値設計を活かす\n- **構造体タグ**: `json:\"...\"` を忘れずに\n- **コメントスタイル**: GoDoc形式に従う（関数上に `// 関数名 ...`）"
+      },
+      {
+        "title": "コードスタイル",
+        "content": "- **インデント**: タブ（Go標準）\n- **行長**: 原則120文字以内\n- **括弧の使い方**: if文などに強制括弧は不要\n- **コメント**: なぜその処理かを書く。自明なことは書かない\n- **TODO**: `// TODO(t3ta): ...` のように責任者付きで記述"
+      },
+      {
+        "title": "クリーンコード実践",
+        "content": "1. **小さな関数**: 20行以内を目安\n2. **エラーは早期リターン**: ネストを浅く保つ\n3. **構造体の責任分離**: DB, SSH, MCPなど役割ごとに分割\n4. **副作用の明示化**: 関数の出力に含める\n5. **インターフェース駆動設計**: テストや差し替えを意識した抽象設計"
+      },
+      {
+        "title": "ファイル構成",
+        "content": "- **ファイルサイズ**: 1ファイル400行以内\n- **ディレクトリ構成**: `cmd/`, `mcp/`, `db/`, `transport/`, `types/`, `test/`\n- **レイヤー分離**: アダプター、ユースケース、ドメインに分ける\n- **インポート順**: 1) 標準 2) サードパーティ 3) ローカル"
+      },
+      {
+        "title": "テスト規約",
+        "content": "- **ファイル名**: `xxx_test.go`\n- **テストフレームワーク**: `testing`, `sqlmock`, `httptest`\n- **テストパターン**: arrange-act-assert\n- **テスト対象**: MCPハンドラ、DBクエリ、SSH接続処理\n- **カバレッジ**: 主要ユースケースは90%以上を目指す"
+      },
+      {
+        "title": "関連ドキュメント",
+        "content": "- [GoDocコメント規約](../01-project/godoc-style-guide.json)\n- [標準パッケージ構成例](../01-project/go-project-structure.json)\n- [テスト戦略](../05-testing/go-test-strategy.json)"
+      }
+    ]
+  }
+}
