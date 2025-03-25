@@ -1,18 +1,18 @@
 {
   "schema": "memory_document_v2",
   "metadata": {
-    "id": "mcp-server-go-user-guide",
-    "title": "Go製 MCPサーバー ユーザーガイド",
+    "id": "mcp-server-ts-user-guide",
+    "title": "TypeScript製 MCPサーバー ユーザーガイド",
     "documentType": "core",
-    "path": "core/mcp-server-go-user-guide.json",
+    "path": "core/mcp-server-ts-user-guide.json",
     "tags": [
       "guide",
-      "golang",
+      "typescript",
       "mcp",
       "user",
       "core"
     ],
-    "lastModified": "2025-03-25T01:01:49.300176Z",
+    "lastModified": "2025-03-25T01:05:00.000000Z",
     "createdAt": "2025-03-21T08:40:50.132Z",
     "version": 2
   },
@@ -20,19 +20,19 @@
     "sections": [
       {
         "title": "概要",
-        "content": "このガイドでは、Goで実装されたMCPサーバー（RDS + SSHトンネル対応）を使用するための手順を示します。CLIベースの運用を前提にしています。"
+        "content": "このガイドでは、TypeScriptで実装されたMCPサーバー（RDS + SSHトンネル対応）を使用するための手順を示します。CLIベースの運用を前提にしています。"
       },
       {
         "title": "前提条件",
-        "content": "- Go 1.22以降がインストールされていること\n- PostgreSQL接続情報（ホスト・ユーザー・パスワード等）\n- （必要に応じて）SSH鍵と踏み台サーバー情報\n- 環境変数または `.env` による設定"
+        "content": "- Node.js (v14以降) と npm がインストールされていること\n- PostgreSQL接続情報（ホスト・ユーザー・パスワード等）\n- （必要に応じて）SSH鍵と踏み台サーバー情報\n- 環境変数または `.env` による設定"
       },
       {
         "title": "インストール方法",
-        "content": "1. リポジトリをクローン:\n```bash\ngit clone https://github.com/your-org/mcp-server-go.git\ncd mcp-server-go\n```\n\n2. ビルド:\n```bash\ngo build -o mcp-server\n```\n\n3. （任意）`.env` を作成:\n```env\nDB_USER=postgres\nDB_PASS=yourpass\nDB_HOST=localhost\nDB_PORT=5432\nDB_NAME=mydb\nUSE_SSH_TUNNEL=true\nSSH_BASTION_HOST=bastion.example.com\nSSH_BASTION_USER=ec2-user\nSSH_PRIVATE_KEY_PATH=~/.ssh/key.pem\n```"
+        "content": "1. リポジトリをクローン:\n```bash\ngit clone https://github.com/your-org/mcp-server-ts.git\ncd mcp-server-ts\n```\n\n2. 依存関係をインストール＆ビルド:\n```bash\nnpm install && npm run build\n```\n\n3. （任意）`.env` を作成:\n```env\nDB_USER=postgres\nDB_PASS=yourpass\nDB_HOST=localhost\nDB_PORT=5432\nDB_NAME=mydb\nUSE_SSH_TUNNEL=true\nSSH_BASTION_HOST=bastion.example.com\nSSH_BASTION_USER=ec2-user\nSSH_PRIVATE_KEY_PATH=~/.ssh/key.pem\n```"
       },
       {
         "title": "起動方法",
-        "content": "SSHトンネルあり:\n```bash\n./mcp-server\n```\n\nSSHトンネルなし（直接接続）:\n```bash\nDB_HOST=rds-host.amazonaws.com DB_PORT=5432 ./mcp-server\n```"
+        "content": "SSHトンネルありの場合（ローカルポート経由接続）:\n```bash\nnpx -y @modelcontextprotocol/server-postgres postgresql://<user>:<pass>@localhost:5433/<dbname>\n```\n\nSSHトンネルなしの場合（直接接続）:\n```bash\nDB_HOST=rds-host.amazonaws.com DB_PORT=5432 npx -y @modelcontextprotocol/server-postgres postgresql://<user>:<pass>@rds-host.amazonaws.com/<dbname>\n```"
       },
       {
         "title": "使用例",
@@ -40,7 +40,7 @@
       },
       {
         "title": "トラブルシューティング",
-        "content": "- **接続できない場合**: SSH接続やDBホスト名、ポートを確認してください\n- **空のレスポンス**: SQLクエリが正しいか、対象テーブルにデータがあるか確認してください\n- **MCPエラー**: type や params 構造が正しいか見直してください"
+        "content": "- **接続できない場合**: SSH接続、DBホスト名、ポート、環境変数の設定を確認してください\n- **空のレスポンス**: SQLクエリが正しいか、対象テーブルにデータがあるか確認してください\n- **MCPエラー**: JSONの `type` や `params` の構造が正しいか見直してください"
       },
       {
         "title": "関連ドキュメント",

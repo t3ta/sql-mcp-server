@@ -1,14 +1,14 @@
 {
   "schema": "memory_document_v2",
   "metadata": {
-    "id": "mcp-server-go-tech-stack",
-    "title": "Go製 MCPサーバー 技術スタック",
+    "id": "mcp-server-ts-tech-stack",
+    "title": "TypeScript製 MCPサーバー 技術スタック",
     "documentType": "core",
-    "path": "core/mcp-server-go-tech-stack.json",
+    "path": "core/mcp-server-ts-tech-stack.json",
     "tags": [
       "tech",
       "stack",
-      "golang",
+      "typescript",
       "mcp",
       "core"
     ],
@@ -20,19 +20,19 @@
     "sections": [
       {
         "title": "概要",
-        "content": "このドキュメントでは、Go言語で実装されたMCPサーバー（RDS・SSHトンネル対応）で使用される技術スタックを一覧形式で記載します。"
+        "content": "このドキュメントでは、TypeScriptで実装されたMCPサーバー（RDS・SSHトンネル対応）で使用される技術スタックを一覧形式で記載します。"
       },
       {
         "title": "言語・実行環境",
-        "content": "- **Go 1.22+**: 静的型付けの高速コンパイル言語。標準ライブラリが充実しており、CLIツール・サーバー実装に最適。\n- **CLI実行環境**: Unix系シェル、PowerShellなどの端末から標準入出力経由で実行。"
+        "content": "- **TypeScript (Node.js)**: 静的型付けと最新のJavaScript機能を活用したスクリプト言語。型安全な実装が可能です。\n- **CLI実行環境**: Unix系シェル、PowerShellなどの端末から標準入出力経由で実行。"
       },
       {
         "title": "主要ライブラリ",
-        "content": "- **pgx**: PostgreSQL向けの高速・柔軟なGoドライバ\n- **sqlmock**: DB層のユニットテストに使用するモックライブラリ\n- **spf13/viper**: 設定ファイル読み込み・環境変数管理\n- **urfave/cli**: CLIツール向けのコマンドラインインターフェースフレームワーク\n- **log/slog または uber-go/zap**: 構造化ロギング用のライブラリ"
+        "content": "- **pg**: PostgreSQL向けのNode.jsクライアントライブラリ\n- **jest**: ユニットテストフレームワーク\n- **dotenv**: 設定ファイルと環境変数管理\n- **commander**: CLIツール向けのコマンドラインインターフェースフレームワーク\n- **winston** または **pino**: 構造化ロギング用のライブラリ"
       },
       {
         "title": "データベースと接続",
-        "content": "- **PostgreSQL (RDS)**: リレーショナルデータベース。AWS RDSを利用\n- **SSHトンネル**: Go標準の `golang.org/x/crypto/ssh` を用いて踏み台サーバー経由で接続\n- **接続方式**: `pgx.ConnConfig.DialFunc` を用いてトンネル越しに安全に接続"
+        "content": "- **PostgreSQL (RDS)**: リレーショナルデータベース。AWS RDSを利用\n- **SSHトンネル**: `tunnel-ssh` または `ssh2` を使用して、踏み台サーバー経由で接続\n- **接続方式**: Node.js の pg.Pool や pg.Client を用いて安全に接続"
       },
       {
         "title": "通信・プロトコル",
@@ -40,11 +40,11 @@
       },
       {
         "title": "開発・運用補助",
-        "content": "- **air**: ホットリロード対応の開発ツール\n- **Docker**: ビルド環境の統一と本番移行用\n- **GitHub Actions**: CI/CD構築用\n- **Secrets Manager**: RDSやSSH接続情報のセキュアな管理（AWS連携時）"
+        "content": "- **nodemon**: ホットリロード対応の開発ツール\n- **Docker**: ビルド環境の統一と本番移行用\n- **GitHub Actions**: CI/CD構築用\n- **Secrets Manager**: RDSやSSH接続情報のセキュアな管理（AWS連携時）"
       },
       {
         "title": "関連ドキュメント",
-        "content": "- [アーキテクチャ構成](../02-architecture/mcp-server-go-architecture.json)\n- [ドメインモデル定義](../01-project/mcp-server-go-domain-models.json)\n- [SSHトンネル設計](../07-infrastructure/ssh-tunneling.json)"
+        "content": "- [アーキテクチャ構成](../02-architecture/mcp-server-ts-architecture.json)\n- [ドメインモデル定義](../01-project/mcp-server-ts-domain-models.json)\n- [SSHトンネル設計](../07-infrastructure/ssh-tunneling.json)"
       }
     ]
   }

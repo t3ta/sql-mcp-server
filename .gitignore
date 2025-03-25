@@ -8,10 +8,6 @@ sql-mcp-server
 *.test
 *.out
 
-# Go
-/vendor/
-*.log
-
 # Environment
 .env
 
@@ -22,5 +18,11 @@ sql-mcp-server
 # OS
 .DS_Store
 
-# Dependency files (optional)
-go.sum
+node_modules/
+dist/
+coverage/
+*.log
+*.log.*
+*.log-*
+*.log/*
+*.log-/*

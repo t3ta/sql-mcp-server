@@ -1,14 +1,14 @@
 {
   "schema": "memory_document_v2",
   "metadata": {
-    "id": "mcp-server-go-coding-standards",
-    "title": "Go製 MCPサーバー コーディング規約",
+    "id": "mcp-server-ts-coding-standards",
+    "title": "TypeScript製 MCPサーバー コーディング規約",
     "documentType": "core",
-    "path": "core/mcp-server-go-coding-standards.json",
+    "path": "core/mcp-server-ts-coding-standards.json",
     "tags": [
       "standards",
       "best-practices",
-      "golang",
+      "typescript",
       "clean-code",
       "core"
     ],
@@ -20,39 +20,39 @@
     "sections": [
       {
         "title": "概要",
-        "content": "このドキュメントでは、Go言語で実装されたMCPサーバー（Bastion経由RDS対応）における基本的なコーディング規約を定義します。"
+        "content": "このドキュメントでは、TypeScriptで実装されたMCPサーバー（Bastion経由RDS対応）における基本的なコーディング規約を定義します。"
       },
       {
         "title": "基本原則",
-        "content": "1. **可読性の重視**: 意図が明確に読み取れるコードを優先\n2. **DRY原則**: 同じ処理は関数化・共通化\n3. **KISS原則**: シンプルで明快なロジックを徹底\n4. **単一責任原則**: 各関数・構造体は1つの目的に特化\n5. **テストファースト**: テスト可能性を意識した設計"
+        "content": "1. **可読性の重視**: 意図が明確に読み取れるコードを優先\n2. **DRY原則**: 同じ処理は関数化・共通化\n3. **KISS原則**: シンプルで明快なロジックを徹底\n4. **単一責任原則**: 各関数・クラスは1つの目的に特化\n5. **テストファースト**: テスト可能性を意識した設計"
       },
       {
         "title": "命名規則",
-        "content": "- **構造体名**: PascalCase（例: `SSHConfig`, `DBClient`）\n- **変数名/関数名**: camelCase（例: `dbPool`, `handleCallTool`）\n- **定数名**: UPPER_SNAKE_CASE（例: `DEFAULT_PORT`）\n- **ファイル名**: スネークケース（例: `ssh_tunnel.go`）\n- **インターフェース名**: `xxxer` 形式（例: `Querier`, `Handler`）"
+        "content": "- **クラス名・インターフェース名**: PascalCase（例: `SSHConfig`, `DBClient`, `MCPHandler`）\n- **変数名/関数名**: camelCase（例: `dbPool`, `handleCallTool`）\n- **定数名**: UPPER_SNAKE_CASE（例: `DEFAULT_PORT`）\n- **ファイル名**: スネークケース（例: `ssh_tunnel.ts`）"
       },
       {
-        "title": "Go特有の規約",
-        "content": "- **エクスポート命名**: 外部公開関数は意図を明確に（例: `StartServer()`）\n- **エラーハンドリング**: `if err != nil` の明示的なハンドリング\n- **deferの活用**: リソース開放を適切な場所で行う\n- **ゼロ値活用**: 初期化時のゼロ値設計を活かす\n- **構造体タグ**: `json:\"...\"` を忘れずに\n- **コメントスタイル**: GoDoc形式に従う（関数上に `// 関数名 ...`）"
+        "title": "TypeScript特有の規約",
+        "content": "- **モジュールエクスポート**: ES Modulesを利用し、明確なエクスポートを行う（例: `export function startServer()`）\n- **エラーハンドリング**: try/catchによる例外処理を徹底する\n- **非同期処理**: async/awaitを活用し、Promiseチェーンをシンプルに保つ\n- **型定義**: TypeScriptの型システムを最大限活用し、明示的な型注釈を行う\n- **コメントスタイル**: JSDoc/TSDoc形式のコメントを推奨（例: `/** 関数の説明 */`）"
       },
       {
         "title": "コードスタイル",
-        "content": "- **インデント**: タブ（Go標準）\n- **行長**: 原則120文字以内\n- **括弧の使い方**: if文などに強制括弧は不要\n- **コメント**: なぜその処理かを書く。自明なことは書かない\n- **TODO**: `// TODO(t3ta): ...` のように責任者付きで記述"
+        "content": "- **インデント**: スペース（一般的には2または4スペース）\n- **行長**: 原則120文字以内\n- **括弧の使い方**: if文や関数定義など、コードの可読性を重視\n- **コメント**: なぜその処理をしているのか、意図を明記する\n- **TODO**: `// TODO(t3ta): ...` のように、責任者付きで記述"
       },
       {
         "title": "クリーンコード実践",
-        "content": "1. **小さな関数**: 20行以内を目安\n2. **エラーは早期リターン**: ネストを浅く保つ\n3. **構造体の責任分離**: DB, SSH, MCPなど役割ごとに分割\n4. **副作用の明示化**: 関数の出力に含める\n5. **インターフェース駆動設計**: テストや差し替えを意識した抽象設計"
+        "content": "1. **小さな関数**: 20行以内を目安\n2. **エラーは早期リターン**: ネストを浅く保つ\n3. **クラス・モジュールの責任分離**: DB, SSH, MCPなど、役割ごとに分割\n4. **副作用の明示化**: 関数の出力に副作用を含める場合は明示する\n5. **インターフェース駆動設計**: テストや差し替えを容易にするため、抽象化を意識する"
       },
       {
         "title": "ファイル構成",
-        "content": "- **ファイルサイズ**: 1ファイル400行以内\n- **ディレクトリ構成**: `cmd/`, `mcp/`, `db/`, `transport/`, `types/`, `test/`\n- **レイヤー分離**: アダプター、ユースケース、ドメインに分ける\n- **インポート順**: 1) 標準 2) サードパーティ 3) ローカル"
+        "content": "- **ファイルサイズ**: 1ファイル400行以内を目安\n- **ディレクトリ構成**: `cmd/`, `mcp/`, `db/`, `transport/`, `types/`, `test/`\n- **レイヤー分離**: アダプター、ユースケース、ドメインに分割\n- **インポート順**: 1) 標準ライブラリ 2) サードパーティ 3) ローカル"
       },
       {
         "title": "テスト規約",
-        "content": "- **ファイル名**: `xxx_test.go`\n- **テストフレームワーク**: `testing`, `sqlmock`, `httptest`\n- **テストパターン**: arrange-act-assert\n- **テスト対象**: MCPハンドラ、DBクエリ、SSH接続処理\n- **カバレッジ**: 主要ユースケースは90%以上を目指す"
+        "content": "- **ファイル名**: `*.test.ts`\n- **テストフレームワーク**: `jest`, `ts-jest` など\n- **テストパターン**: arrange-act-assert\n- **テスト対象**: MCPハンドラ、DBクエリ、SSH接続処理\n- **カバレッジ**: 主要ユースケースは90%以上を目指す"
       },
       {
         "title": "関連ドキュメント",
-        "content": "- [GoDocコメント規約](../01-project/godoc-style-guide.json)\n- [標準パッケージ構成例](../01-project/go-project-structure.json)\n- [テスト戦略](../05-testing/go-test-strategy.json)"
+        "content": "- [TSDocコメント規約](../01-project/tsdoc-style-guide.json)\n- [標準パッケージ構成例](../01-project/ts-project-structure.json)\n- [テスト戦略](../05-testing/ts-test-strategy.json)"
       }
     ]
   }
