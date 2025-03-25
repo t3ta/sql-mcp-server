@@ -35,7 +35,6 @@ async function startServer() {
       exec: false,
     };
 
-    console.log('Establishing SSH tunnel...');
     tunnel(tunnelConfig, (error: unknown, server: unknown) => {
       if (error) {
         console.error('SSH Tunnel error:', error);
