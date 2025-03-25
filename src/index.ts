@@ -97,12 +97,12 @@ function initMCPServer(pool: mysql.Pool) {
       "SELECT table_name FROM information_schema.tables WHERE table_schema = ?",
       [process.env.DB_NAME]
     );
-    const tables = rows as Array<{ table_name: string }>;
+    const tables = rows as Array<{ TABLE_NAME: string }>;
     return {
       resources: tables.map((row) => ({
-        uri: `mysql://${process.env.DB_HOST}/${row.table_name}/schema`,
+        uri: `mysql://${process.env.DB_HOST}/${row.TABLE_NAME}/schema`,
         mimeType: 'application/json',
-        name: `"${row.table_name}" database schema`,
+        name: `"${row.TABLE_NAME}" database schema`,
       })),
     };
   });
