@@ -32,7 +32,7 @@ npm run build
 
 Configuration (Optional .env file)
 
-Create a .env file in the project root:
+Create a .env file in the project root (./dist):
 
 DB_USER=postgres
 DB_PASS=yourpassword
