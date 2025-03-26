@@ -15,10 +15,56 @@ import type { TunnelConfig } from 'tunnel-ssh';
 dotenv.config();
 
 const useSshTunnel = process.env.USE_SSH_TUNNEL === 'true';
+// グローバル変数として定義
 let sshServer: any;
+let mcpServer: Server | undefined;
+let pool: mysql.Pool;
+
+// シャットダウン処理を実装
+async function shutdown(signal: string) {
+  console.log(`\nReceived ${signal}. Starting graceful shutdown...`);
+
+  try {
+    // 1. MCPサーバーを閉じる（新規リクエストの受付を停止）
+    if (mcpServer) {
+      console.log('Closing MCP server...');
+      await mcpServer.close();
+    }
+
+    // 2. SSHトンネルを閉じる（アクティブな場合）
+    if (sshServer) {
+      console.log('Closing SSH tunnel...');
+      await new Promise<void>((resolve, reject) => {
+        sshServer.close((err: Error) => {
+          if (err) {
+            console.error('Error closing SSH tunnel:', err);
+            reject(err);
+          } else {
+            resolve();
+          }
+        });
+      });
+    }
+
+    // 3. MySQLコネクションプールを閉じる
+    if (pool) {
+      console.log('Closing MySQL connection pool...');
+      await pool.end();
+    }
+
+    console.log('Graceful shutdown completed.');
+    process.exit(0);
+  } catch (error) {
+    console.error('Error during shutdown:', error);
+    process.exit(1);
+  }
+}
+
+// シグナルハンドラを設定
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));
 
 async function startServer() {
-  let pool: mysql.Pool;
 
   if (useSshTunnel) {
     // SSHトンネルの設定（MySQLの場合、デフォルトポートは3306）
@@ -83,9 +129,9 @@ async function startServer() {
   }
 }
 
-function initMCPServer(pool: mysql.Pool) {
+function initMCPServer(mysqlPool: mysql.Pool) {
   // MCPサーバーの初期化
-  const mcpServer = new Server(
+  mcpServer = new Server(
     { name: 'example-servers/server-ts-mysql', version: '0.1.0' },
     { capabilities: { resources: {}, tools: {} } }
   );
