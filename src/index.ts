@@ -31,7 +31,13 @@ async function shutdown(signal: string) {
       await mcpServer.close();
     }
 
-    // 2. SSHトンネルを閉じる（アクティブな場合）
+    // 2. MySQLコネクションプールを閉じる
+    if (pool) {
+      console.log('Closing MySQL connection pool...');
+      await pool.end();
+    }
+
+    // 3. SSHトンネルを閉じる（アクティブな場合）
     if (sshServer) {
       console.log('Closing SSH tunnel...');
       await new Promise<void>((resolve, reject) => {
@@ -44,12 +50,6 @@ async function shutdown(signal: string) {
           }
         });
       });
-    }
-
-    // 3. MySQLコネクションプールを閉じる
-    if (pool) {
-      console.log('Closing MySQL connection pool...');
-      await pool.end();
     }
 
     console.log('Graceful shutdown completed.');
