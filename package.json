@@ -7,6 +7,7 @@
     "build": "tsup",
     "prepare": "npm run build",
     "dev": "tsup --watch",
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint src/**/*.ts",
     "inspect": "npx @modelcontextprotocol/inspector $(grep -v '^#' .env | xargs -I{} echo '-e' {}) node dist/index.js"
   },
   "bin": {
@@ -20,6 +21,9 @@
   },
   "devDependencies": {
     "@types/node": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.28.0",
+    "@typescript-eslint/parser": "^8.28.0",
+    "eslint": "^9.23.0",
     "shx": "^0.3.4",
     "tsup": "^8.4.0",
     "typescript": "^5.6.2"

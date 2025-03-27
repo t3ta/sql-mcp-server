@@ -1,0 +1,41 @@
+{
+  "schema": "memory_document_v2",
+  "metadata": {
+    "id": "cbbaeac8-f517-40b0-a9f4-a5f4b4fac4d0",
+    "title": "ブランチコンテキスト",
+    "documentType": "branch_context",
+    "path": "branchContext.json",
+    "tags": [
+      "branch-context"
+    ],
+    "lastModified": "2025-03-27T05:27:42.961Z",
+    "createdAt": "2025-03-27T05:27:42.961Z",
+    "version": 1
+  },
+  "content": {
+    "branchName": "feature/connect-message",
+    "purpose": "このブランチの目的を記述してください",
+    "createdAt": "2025-03-27T05:27:42.961Z",
+    "userStories": [
+      {
+        "id": "4d045f5f-62ee-451e-8302-a9972dbefad4",
+        "description": "解決する課題1",
+        "completed": false,
+        "priority": 1
+      },
+      {
+        "id": "63695f64-e4e0-4367-964d-38a055de0d7f",
+        "description": "解決する課題2",
+        "completed": false,
+        "priority": 2
+      },
+      {
+        "id": "ce8b52a9-075d-42c7-bb29-fccd6ee667fc",
+        "description": "解決する課題3",
+        "completed": false,
+        "priority": 3
+      }
+    ],
+    "additionalNotes": ""
+  }
+}

@@ -1,0 +1,240 @@
+{
+  "schema": "memory_document_v2",
+  "metadata": {
+    "id": "tags-index",
+    "title": "タグインデックス",
+    "documentType": "generic",
+    "path": "tags/index.json",
+    "tags": [
+      "index",
+      "meta"
+    ],
+    "lastModified": "2025-03-27T05:31:18.259Z",
+    "createdAt": "2025-03-27T05:31:18.259Z",
+    "version": 1
+  },
+  "content": {
+    "sections": [
+      {
+        "title": "Tags List",
+        "content": "タグとドキュメントの関連付け"
+      }
+    ],
+    "tagMap": {
+      "architecture": {
+        "count": 1,
+        "documents": [
+          {
+            "path": "core/architecture.json",
+            "title": "core/architecture.json"
+          }
+        ]
+      },
+      "system-design": {
+        "count": 1,
+        "documents": [
+          {
+            "path": "core/architecture.json",
+            "title": "core/architecture.json"
+          }
+        ]
+      },
+      "core": {
+        "count": 6,
+        "documents": [
+          {
+            "path": "core/architecture.json",
+            "title": "core/architecture.json"
+          },
+          {
+            "path": "core/coding-standards.json",
+            "title": "core/coding-standards.json"
+          },
+          {
+            "path": "core/domain-models.json",
+            "title": "core/domain-models.json"
+          },
+          {
+            "path": "core/glossary.json",
+            "title": "core/glossary.json"
+          },
+          {
+            "path": "core/tech-stack.json",
+            "title": "core/tech-stack.json"
+          },
+          {
+            "path": "core/user-guide.json",
+            "title": "core/user-guide.json"
+          }
+        ]
+      },
+      "typescript": {
+        "count": 6,
+        "documents": [
+          {
+            "path": "core/architecture.json",
+            "title": "core/architecture.json"
+          },
+          {
+            "path": "core/coding-standards.json",
+            "title": "core/coding-standards.json"
+          },
+          {
+            "path": "core/domain-models.json",
+            "title": "core/domain-models.json"
+          },
+          {
+            "path": "core/glossary.json",
+            "title": "core/glossary.json"
+          },
+          {
+            "path": "core/tech-stack.json",
+            "title": "core/tech-stack.json"
+          },
+          {
+            "path": "core/user-guide.json",
+            "title": "core/user-guide.json"
+          }
+        ]
+      },
+      "standards": {
+        "count": 1,
+        "documents": [
+          {
+            "path": "core/coding-standards.json",
+            "title": "core/coding-standards.json"
+          }
+        ]
+      },
+      "best-practices": {
+        "count": 1,
+        "documents": [
+          {
+            "path": "core/coding-standards.json",
+            "title": "core/coding-standards.json"
+          }
+        ]
+      },
+      "clean-code": {
+        "count": 1,
+        "documents": [
+          {
+            "path": "core/coding-standards.json",
+            "title": "core/coding-standards.json"
+          }
+        ]
+      },
+      "domain": {
+        "count": 1,
+        "documents": [
+          {
+            "path": "core/domain-models.json",
+            "title": "core/domain-models.json"
+          }
+        ]
+      },
+      "models": {
+        "count": 1,
+        "documents": [
+          {
+            "path": "core/domain-models.json",
+            "title": "core/domain-models.json"
+          }
+        ]
+      },
+      "mcp": {
+        "count": 4,
+        "documents": [
+          {
+            "path": "core/domain-models.json",
+            "title": "core/domain-models.json"
+          },
+          {
+            "path": "core/glossary.json",
+            "title": "core/glossary.json"
+          },
+          {
+            "path": "core/tech-stack.json",
+            "title": "core/tech-stack.json"
+          },
+          {
+            "path": "core/user-guide.json",
+            "title": "core/user-guide.json"
+          }
+        ]
+      },
+      "glossary": {
+        "count": 1,
+        "documents": [
+          {
+            "path": "core/glossary.json",
+            "title": "core/glossary.json"
+          }
+        ]
+      },
+      "terminology": {
+        "count": 1,
+        "documents": [
+          {
+            "path": "core/glossary.json",
+            "title": "core/glossary.json"
+          }
+        ]
+      },
+      "tech": {
+        "count": 1,
+        "documents": [
+          {
+            "path": "core/tech-stack.json",
+            "title": "core/tech-stack.json"
+          }
+        ]
+      },
+      "stack": {
+        "count": 1,
+        "documents": [
+          {
+            "path": "core/tech-stack.json",
+            "title": "core/tech-stack.json"
+          }
+        ]
+      },
+      "guide": {
+        "count": 1,
+        "documents": [
+          {
+            "path": "core/user-guide.json",
+            "title": "core/user-guide.json"
+          }
+        ]
+      },
+      "user": {
+        "count": 1,
+        "documents": [
+          {
+            "path": "core/user-guide.json",
+            "title": "core/user-guide.json"
+          }
+        ]
+      },
+      "index": {
+        "count": 1,
+        "documents": [
+          {
+            "path": "tags/index.json",
+            "title": "tags/index.json"
+          }
+        ]
+      },
+      "meta": {
+        "count": 1,
+        "documents": [
+          {
+            "path": "tags/index.json",
+            "title": "tags/index.json"
+          }
+        ]
+      }
+    }
+  }
+}

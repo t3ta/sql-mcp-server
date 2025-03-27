@@ -1,0 +1,22 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "parser": "@typescript-eslint/parser", // <-- TypeScriptパーサーを指定
+  "plugins": [
+    "@typescript-eslint" // <-- TypeScriptプラグインを指定
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended" // <-- TypeScriptの推奨ルールを追加
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-console": "error" // console.log をエラーにする！これで禁止ね！🚫
+  }
+}

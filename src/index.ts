@@ -22,28 +22,28 @@ let pool: mysql.Pool;
 
 // シャットダウン処理を実装
 async function shutdown(signal: string) {
-  console.log(`\nReceived ${signal}. Starting graceful shutdown...`);
+  console.error(`\nReceived ${signal}. Starting graceful shutdown...`); // Changed to console.error
 
   try {
     // 1. MCPサーバーを閉じる（新規リクエストの受付を停止）
     if (mcpServer) {
-      console.log('Closing MCP server...');
+      console.error('Closing MCP server...'); // Changed to console.error
       await mcpServer.close();
     }
 
     // 2. MySQLコネクションプールを閉じる
     if (pool) {
-      console.log('Closing MySQL connection pool...');
+      console.error('Closing MySQL connection pool...'); // Changed to console.error
       await pool.end();
     }
 
     // 3. SSHトンネルを閉じる（アクティブな場合）
     if (sshServer) {
-      console.log('Closing SSH tunnel...');
+      console.error('Closing SSH tunnel...'); // Changed to console.error
       await new Promise<void>((resolve, reject) => {
         sshServer.close((err: Error) => {
           if (err) {
-            console.error('Error closing SSH tunnel:', err);
+            console.error('Error closing SSH tunnel:', err); // Changed to console.error
             reject(err);
           } else {
             resolve();
@@ -52,10 +52,10 @@ async function shutdown(signal: string) {
       });
     }
 
-    console.log('Graceful shutdown completed.');
+    console.error('Graceful shutdown completed.'); // Changed to console.error
     process.exit(0);
   } catch (error) {
-    console.error('Error during shutdown:', error);
+    console.error('Error during shutdown:', error); // Changed to console.error
     process.exit(1);
   }
 }
@@ -83,7 +83,7 @@ async function startServer() {
 
     tunnel(tunnelConfig, (error: unknown, server: unknown) => {
       if (error) {
-        console.error('SSH Tunnel error:', error);
+        console.error('SSH Tunnel error:', error); // Changed to console.error
         process.exit(1);
       }
 
@@ -109,7 +109,7 @@ async function startServer() {
           initMCPServer(pool);
         })
         .catch(err => {
-          console.error("MySQL not ready:", err);
+          console.error("MySQL not ready via tunnel:", err); // Changed to console.error
           process.exit(1);
         });
     });
@@ -125,7 +125,16 @@ async function startServer() {
       connectionLimit: 10,
       queueLimit: 0,
     });
-    initMCPServer(pool);
+     // Ensure MySQL is reachable before starting MCP server
+     pool.getConnection()
+     .then(conn => {
+       conn.release();
+       initMCPServer(pool);
+     })
+     .catch(err => {
+       console.error("MySQL not ready directly:", err); // Changed to console.error
+       process.exit(1);
+     });
   }
 }
 
@@ -194,9 +203,11 @@ function initMCPServer(mysqlPool: mysql.Pool) {
       const sql = request.params.arguments?.sql as string;
       const connection = await pool.getConnection();
       try {
-        await connection.query("START TRANSACTION");
         // MySQLでは明示的なREAD ONLYモードは無いが、クエリ自体で書き込みを行わなければ安全
+        // READ ONLYトランザクションを開始する方がより安全
+        await connection.query("START TRANSACTION READ ONLY");
         const [rows] = await connection.query(sql);
+        await connection.query("COMMIT"); // READ ONLYでもCOMMIT/ROLLBACKは必要
         return {
           content: [
             { type: 'text', text: JSON.stringify(rows, null, 2) },
@@ -204,17 +215,34 @@ function initMCPServer(mysqlPool: mysql.Pool) {
           isError: false,
         };
       } catch (error) {
-        throw error;
+        await connection.query("ROLLBACK"); // エラー時はロールバック
+        throw error; // エラーを上位に伝播
       } finally {
-        await connection.query("ROLLBACK");
         connection.release();
       }
     }
     throw new Error(`Unknown tool: ${request.params.name}`);
   });
 
-  // MCPサーバーをStdioトランスポートで起動
-  mcpServer.connect(new StdioServerTransport()).catch(console.error);
+  // MCPサーバーをStdioトランスポートで起動し、成功したら通知メッセージを送信
+  mcpServer.connect(new StdioServerTransport())
+    .then(() => {
+      // サーバー準備完了のJSON-RPC通知を標準出力へ
+      const readyMessage = {
+        jsonrpc: "2.0",
+        method: "serverReady",
+        params: { message: "SQL MCP Server is ready." }
+      };
+      process.stdout.write(JSON.stringify(readyMessage) + '\n');
+      console.error("MCP Server is ready and listening on stdio."); // Changed to console.error
+    })
+    .catch(error => {
+      console.error('Failed to connect MCP server:', error); // Changed to console.error
+      process.exit(1); // 接続失敗時は終了
+    });
 }
 
-startServer().catch(console.error);
+startServer().catch(error => {
+  console.error('Failed to start server:', error); // Changed to console.error
+  process.exit(1); // 起動失敗時も終了
+});
