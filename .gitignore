@@ -26,3 +26,6 @@ coverage/
 *.log-*
 *.log/*
 *.log-/*
+
+.roo
+docs/global-memory-bank/tags/index.json
