@@ -1,0 +1,40 @@
+{
+  "schema": "memory_document_v2",
+  "metadata": {
+    "id": "refactoring-plan-index-ts-v1",
+    "title": "index.ts リファクタリング計画",
+    "documentType": "refactoring_plan",
+    "path": "refactoring/index-refactoring-plan.json",
+    "tags": [
+      "refactoring",
+      "architecture",
+      "index.ts",
+      "feature/get-schema"
+    ],
+    "version": 1,
+    "createdAt": "2025-04-01T03:33:48.389Z",
+    "lastModified": "2025-04-01T03:33:48.389Z"
+  },
+  "content": {
+    "description": "src/index.ts を機能ごとにモジュール分割するリファクタリング計画。バグ修正（initMCPServerの複数回呼び出し防止）とコネクションリーク対策も含む。",
+    "targetFile": "src/index.ts",
+    "proposedStructure": [
+      "src/config.ts",
+      "src/ssh-tunnel.ts",
+      "src/db.ts",
+      "src/mcp/handlers.ts",
+      "src/mcp/server.ts",
+      "src/shutdown.ts",
+      "src/index.ts"
+    ],
+    "diagram": "graph TD\n    subgraph Initialization Flow\n        direction LR\n        Start --> Config;\n        Config --> SshTunnelCheck{Use SSH?};\n        SshTunnelCheck -- Yes --> ConnectSshTunnel[Connect SSH Tunnel (ssh-tunnel.ts)];\n        SshTunnelCheck -- No --> InitDbPoolDirect[Initialize DB Pool (db.ts)];\n        ConnectSshTunnel --> InitDbPoolTunnel[Initialize DB Pool via Tunnel (db.ts)];\n        InitDbPoolDirect --> CheckDbConnection[Check DB Connection (db.ts) - with robust error handling];\n        InitDbPoolTunnel --> CheckDbConnection;\n        CheckDbConnection -- Success --> InitMcpServer[Initialize MCP Server (mcp/server.ts)];\n        InitMcpServer --> SetupRequestHandlers[Setup Request Handlers (mcp/handlers.ts) - with robust error/connection handling];\n        SetupRequestHandlers --> SetupShutdown[Setup Shutdown Handlers (shutdown.ts) - with robust cleanup];\n        SetupShutdown --> Ready;\n        CheckDbConnection -- Failure --> HandleInitError[Handle Initialization Error & Cleanup];\n    end\n\n    subgraph Modules\n        Config[src/config.ts]\n        SshTunnel[src/ssh-tunnel.ts]\n        Db[src/db.ts - Centralized Pool & Connection Mgmt]\n        McpServer[src/mcp/server.ts]\n        McpHandlers[src/mcp/handlers.ts - Robust Error/Connection Handling]\n        Shutdown[src/shutdown.ts - Robust Cleanup Logic]\n        Index[src/index.ts]\n    end\n\n    InitMcpServer --> McpHandlers;\n    Index --> Start;",
+    "keyPoints": [
+      "機能ごとのモジュール分割 (config, ssh, db, mcp, shutdown)",
+      "index.ts は起動処理に専念",
+      "DB接続とMCPサーバー初期化のシーケンスを明確化し、複数回初期化バグを修正",
+      "DBコネクション管理を一元化し、コネクションリーク対策を強化",
+      "各モジュールでのエラーハンドリングを強化"
+    ],
+    "status": "approved"
+  }
+}
