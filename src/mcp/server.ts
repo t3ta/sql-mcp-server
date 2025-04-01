@@ -88,7 +88,7 @@ export async function closeMcpServer(): Promise<void> {
             mcpServer = null; // インスタンス参照をクリア
         } catch (error) {
             console.error('Error closing MCP server:', error);
-            // throw error; // 必要に応じて再スロー
+            throw error; // 必要に応じて再スロー
         }
     } else {
         console.log('MCP server was not active, skipping closure.');
