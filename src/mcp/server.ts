@@ -2,12 +2,12 @@
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
-  CallToolRequestSchema,
-  ListResourcesRequestSchema,
-  ListToolsRequestSchema,
-  ReadResourceRequestSchema,
-  type CallToolRequest,
-  type ReadResourceRequest,
+    CallToolRequestSchema,
+    ListResourcesRequestSchema,
+    ListToolsRequestSchema,
+    ReadResourceRequestSchema,
+    type CallToolRequest,
+    type ReadResourceRequest,
 } from "@modelcontextprotocol/sdk/types.js";
 import {
     handleCallTool,
@@ -29,7 +29,7 @@ export function initializeMcpServer(): Server {
         return mcpServer;
     }
 
-    console.log('Initializing MCP server...');
+    console.error('Initializing MCP server...');
     // MCPサーバーの初期化 (configから情報を取得)
     mcpServer = new Server(
         { name: mcpServerInfo.name, version: mcpServerInfo.version },
@@ -45,7 +45,7 @@ export function initializeMcpServer(): Server {
     // CallToolRequestSchema のハンドラには params が渡される
     mcpServer.setRequestHandler(CallToolRequestSchema, (request: CallToolRequest) => handleCallTool(request.params));
 
-    console.log('MCP server initialized and handlers registered.');
+    console.error('MCP server initialized and handlers registered.');
     return mcpServer;
 }
 
@@ -56,11 +56,11 @@ export async function startMcpServer(): Promise<void> {
     if (!mcpServer) {
         throw new Error('MCP Server has not been initialized. Call initializeMcpServer first.');
     }
-    console.log('Starting MCP server with Stdio transport...');
+    console.error('Starting MCP server with Stdio transport...');
     try {
         // MCPサーバーをStdioトランスポートで接続 (起動)
         await mcpServer.connect(new StdioServerTransport());
-        console.log('MCP server connected via Stdio.');
+        console.error('MCP server connected via Stdio.');
     } catch (error) {
         console.error('Failed to start MCP server:', error);
         throw error; // エラーを再スロー
@@ -81,16 +81,16 @@ export function getMcpServer(): Server | null {
  */
 export async function closeMcpServer(): Promise<void> {
     if (mcpServer) {
-        console.log('Closing MCP server...');
+        console.error('Closing MCP server...');
         try {
             await mcpServer.close();
-            console.log('MCP server closed successfully.');
+            console.error('MCP server closed successfully.');
             mcpServer = null; // インスタンス参照をクリア
         } catch (error) {
             console.error('Error closing MCP server:', error);
             throw error; // 必要に応じて再スロー
         }
     } else {
-        console.log('MCP server was not active, skipping closure.');
+        console.error('MCP server was not active, skipping closure.');
     }
 }

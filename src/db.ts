@@ -15,16 +15,16 @@ export async function initializeDbPool(): Promise<mysql.Pool> {
     return pool; // すでに初期化済みなら既存のプールを返す
   }
 
-  console.log('Initializing database connection pool...');
+  console.error('Initializing database connection pool...');
   try {
     pool = mysql.createPool(dbPoolOptions);
 
     // 接続テスト
     const connection = await pool.getConnection();
-    console.log('Database connection test successful. Releasing test connection.');
+    console.error('Database connection test successful. Releasing test connection.');
     connection.release();
 
-    console.log('Database connection pool initialized successfully.');
+    console.error('Database connection pool initialized successfully.');
     return pool;
   } catch (error) {
     console.error('Failed to initialize database connection pool:', error);
@@ -40,10 +40,10 @@ export async function initializeDbPool(): Promise<mysql.Pool> {
  */
 export async function closeDbPool(): Promise<void> {
   if (pool) {
-    console.log('Closing database connection pool...');
+    console.error('Closing database connection pool...');
     try {
       await pool.end();
-      console.log('Database connection pool closed successfully.');
+      console.error('Database connection pool closed successfully.');
       pool = null; // プール参照をクリア
     } catch (error) {
       console.error('Error closing database connection pool:', error);
@@ -51,7 +51,7 @@ export async function closeDbPool(): Promise<void> {
       // throw error; // 必要に応じて再スロー
     }
   } else {
-    console.log('Database pool was not active, skipping closure.');
+    console.error('Database pool was not active, skipping closure.');
   }
 }
 

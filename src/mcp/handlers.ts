@@ -21,19 +21,39 @@ function pool(): mysql.Pool {
  * ListResources リクエストハンドラ
  */
 export async function handleListResources(): Promise<ListResourcesResult> {
-  // ... (実装は変更なし) ...
-  const [rows] = await pool().query(
-    "SELECT table_name FROM information_schema.tables WHERE table_schema = ?",
-    [dbName]
-  );
-  const tables = rows as Array<{ table_name: string }>;
-  return {
-    resources: tables.map((row) => ({
-      uri: `mysql:///${row.table_name}/schema`,
-      mimeType: 'application/json',
-      name: `"${row.table_name}" database schema`,
-    })),
-  };
+  if (!dbName) {
+    // TEMP: dbName が未定義の場合のエラーハンドリングを追加
+    console.error('Database name (dbName) is not defined or imported correctly.');
+    // エラーを投げるか、空の結果を返すか検討
+    // throw new Error('Database name is not configured.');
+    return { resources: [] };
+  }
+
+  try { // TEMP: DB操作全体を try...catch で囲む
+    // information_schema からテーブルリストを取得
+    // TEMP: query<T> を使用し、RowDataPacket[] を期待する型に変更
+    const [rows] = await pool().query<mysql.RowDataPacket[]>(
+      'SELECT table_name FROM information_schema.tables WHERE table_schema = ?',
+      [dbName]
+    );
+
+    // TEMP: rows が配列であることをより確実にチェックし、string 型にキャスト
+    const tables = Array.isArray(rows) ? rows.map(row => ({ table_name: row.table_name as string })) : [];
+
+    return {
+      resources: tables.map((row) => ({
+        // uri と name に実際の DB 名とテーブル名を埋め込む
+        uri: `mysql://${dbName}/${row.table_name}/schema`, // dbName を含める
+        mimeType: 'application/json',
+        name: `"${dbName}"."${row.table_name}" schema`, // dbName を含める
+      })),
+    };
+  } catch (error) { // TEMP: エラーハンドリングを追加
+    console.error('Error fetching resources:', error);
+    // エラー発生時も空の結果を返すか、エラーを再スローするか検討
+    // throw error;
+    return { resources: [] };
+  }
 }
 
 /**
@@ -177,7 +197,7 @@ export async function handleCallTool(params: CallToolRequest['params']): Promise
     try {
       // ... (トランザクション、クエリ実行、ロールバックは変更なし) ...
       await connection.beginTransaction();
-      console.log(`Executing read-only query: ${sql}`);
+      console.error(`Executing read-only query: ${sql}`);
       const [rows] = await connection.query(sql);
       await connection.rollback();
       return {

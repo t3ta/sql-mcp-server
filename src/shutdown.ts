@@ -12,11 +12,11 @@ let isShuttingDown = false; // シャットダウン処理中フラグ
  */
 async function shutdown(signal: string) {
   if (isShuttingDown) {
-    console.log('Shutdown already in progress...');
+    console.error('Shutdown already in progress...');
     return;
   }
   isShuttingDown = true;
-  console.log(`\nReceived ${signal}. Starting graceful shutdown...`);
+  console.error(`\nReceived ${signal}. Starting graceful shutdown...`);
 
   try {
     // 1. MCPサーバーを閉じる (新規リクエスト受付停止)
@@ -30,7 +30,7 @@ async function shutdown(signal: string) {
       await closeSshTunnel();
     }
 
-    console.log('Graceful shutdown completed.');
+    console.error('Graceful shutdown completed.');
     process.exit(0); // 正常終了
   } catch (error) {
     console.error('Error during shutdown:', error);
@@ -45,5 +45,5 @@ export function setupShutdownHandlers() {
   process.on('SIGTERM', () => shutdown('SIGTERM')); // kill コマンドなど
   process.on('SIGINT', () => shutdown('SIGINT'));   // Ctrl+C
   // 必要に応じて他のシグナルも追加 (e.g., SIGHUP)
-  console.log('Shutdown signal handlers registered.');
+  console.error('Shutdown signal handlers registered.');
 }

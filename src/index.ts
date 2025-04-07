@@ -9,7 +9,7 @@ import { setupShutdownHandlers } from './shutdown.js';
  * アプリケーションのメインエントリーポイント
  */
 async function main() {
-  console.log('Starting MCP server application...');
+  console.error('Starting MCP server application...');
 
   try {
     // --- 初期化シーケンス ---
@@ -17,7 +17,7 @@ async function main() {
     if (useSshTunnel) {
       await connectSshTunnel(); // 接続完了を待つ
     } else {
-      console.log('Skipping SSH tunnel connection as USE_SSH_TUNNEL is not true.');
+      console.error('Skipping SSH tunnel connection as USE_SSH_TUNNEL is not true.');
     }
 
     // 2. DBコネクションプール初期化 & 接続テスト
@@ -35,12 +35,12 @@ async function main() {
     // 5. MCPサーバーをStdioトランスポートで起動
     // startMcpServer は内部で mcpServer.connect を呼び出し、
     // プロセスが終了シグナルを受け取るまで非同期に待機する。
-    console.log('MCP Server initialized. Starting connection listener...');
+    console.error('MCP Server initialized. Starting connection listener...');
     await startMcpServer();
 
     // 通常、startMcpServer が完了するのはシャットダウン処理が開始された後か、
     // 接続が予期せず切断された場合。
-    console.log('MCP server process finished.');
+    console.error('MCP server process finished.');
 
   } catch (error) {
     console.error('Application failed during startup or runtime:', error);
