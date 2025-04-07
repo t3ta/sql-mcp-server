@@ -29,3 +29,4 @@ coverage/
 
 .roo
 docs/global-memory-bank/tags/index.json
+.eslintcache

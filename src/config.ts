@@ -80,12 +80,12 @@ export const mcpServerInfo = {
 
 // --- 環境変数チェック ---
 function checkEnvVar(name: string, required: boolean = true): string | undefined {
-    const value = process.env[name];
-    if (required && !value) {
-        console.error(`Error: Required environment variable ${name} is not set.`);
-        process.exit(1);
-    }
-    return value;
+  const value = process.env[name];
+  if (required && !value) {
+    console.error(`Error: Required environment variable ${name} is not set.`);
+    process.exit(1);
+  }
+  return value;
 }
 
 // 必須チェック
@@ -95,9 +95,9 @@ checkEnvVar('DB_HOST');
 // DB_NAME は上でチェック済み
 
 if (useSshTunnel) {
-    checkEnvVar('SSH_BASTION_USER');
-    checkEnvVar('SSH_BASTION_HOST');
-    checkEnvVar('SSH_PRIVATE_KEY_PATH'); // 上でチェック済みだが念のため
+  checkEnvVar('SSH_BASTION_USER');
+  checkEnvVar('SSH_BASTION_HOST');
+  checkEnvVar('SSH_PRIVATE_KEY_PATH'); // 上でチェック済みだが念のため
 }
 
-console.log('Configuration loaded successfully.'); // 設定読み込み完了ログ
+console.error('Configuration loaded successfully.'); // 設定読み込み完了ログ
